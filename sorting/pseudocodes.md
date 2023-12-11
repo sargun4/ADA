@@ -1,6 +1,7 @@
 ```py
-1. Merge Sort:
-
+1. Merge Sort: 
+T(n) = 2T(n/2) + O(n)  => O(NlogN)
+S(n) = O(N)
 merge_sort(arr, l, r):
   if l < r:
     mid = (l + r) // 2
