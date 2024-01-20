@@ -5,17 +5,16 @@
 using namespace std;
 
 pair<long long, vector<int>> CountSplitInversion(vector<int>& X, vector<int>& Y) {
-    long long count = 0;
+    long long ctr = 0;
     vector<int> merged;
     int i = 0, j = 0;
-
     while (i < X.size() && j < Y.size()) {
         if (X[i] <= Y[j]) {
             merged.push_back(X[i]);
             i++;
         } else {
             merged.push_back(Y[j]);
-            count += X.size() - i;
+            ctr += X.size() - i;
             j++;
         }
     }
@@ -30,25 +29,20 @@ pair<long long, vector<int>> CountSplitInversion(vector<int>& X, vector<int>& Y)
         j++;
     }
 
-    return {count, merged};
+    return {ctr, merged};
 }
 
 pair<long long, vector<int>> CountInversion(vector<int>& A) {
     int n = A.size();
-
     if (n == 1) {
         return {0, A};
     }
-
     int mid = n / 2;
     vector<int> Aleft(A.begin(), A.begin() + mid);
     vector<int> Aright(A.begin() + mid, A.end());
-
     auto [bleft, AleftSorted] = CountInversion(Aleft);
     auto [bright, ArightSorted] = CountInversion(Aright);
-
     auto [bsplit, Amerged] = CountSplitInversion(AleftSorted, ArightSorted);
-
     return {bleft + bright + bsplit, Amerged};
 }
 
@@ -82,14 +76,14 @@ Count-Inversion(A)
 end
 
 Count-Split-Inversion(X, Y)
-    Initialize i = 1, j = 1, k = 1, count = 0;
+    Initialize i = 1, j = 1, k = 1, ctr = 0;
     Initialize an output array A of size |X| + |Y|;
     
     while i ≤ |X| and j ≤ |Y| do
         if X[i] ≤ Y[j] then
             A[k] = X[i]; i = i + 1; k = k + 1;
         else
-            A[k] = Y[j]; count = count + (|X| - i + 1); j = j + 1; k = k + 1;
+            A[k] = Y[j]; ctr = ctr + (|X| - i + 1); j = j + 1; k = k + 1;
         end
     end
     
@@ -98,5 +92,5 @@ Count-Split-Inversion(X, Y)
     else
         Append the remaining elements of X into A;
     
-    return (count, A);
+    return (ctr, A);
 end

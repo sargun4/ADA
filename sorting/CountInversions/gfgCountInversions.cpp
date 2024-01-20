@@ -1,6 +1,9 @@
-// C++ program to Count
-// Inversions in an array
-// using Merge Sort
+// The idea is similar to merge sort, divide the array into two equal or almost equal halves in each step until the base case is reached.
+// Create a function merge that counts the number of inversions when two halves of the array are merged, 
+// Create two indices i and j, i is the index for the first half, and j is an index of the second half. 
+// If a[i] is greater than a[j], then there are (mid – i) inversions because left and right subarrays are sorted, so all the remaining elements in left-subarray (a[i+1], a[i+2] … a[mid]) will be greater than a[j].
+// Create a recursive function to divide the array into halves and find the answer by summing the number of inversions in the first half, the number of inversions in the second half and the number of inversions by merging the two.
+// The base case of recursion is when there is only one element in the given half.
 #include <bits/stdc++.h>
 using namespace std;
 
