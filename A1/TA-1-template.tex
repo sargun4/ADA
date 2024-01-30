@@ -15,28 +15,89 @@
 \maketitle
 
 \section{Preprocessing}
-% Your preprocessing steps go here
+% Determine the Search Range
+Find the minimum and maximum values among the first and last elements of arrays \(A\), \(B\), and \(C\). Initialize the search range \(low\) and \(high\) using these minimum and maximum values.
+
+Considering 1-based indexing,
+\[
+\text{{low}} \leftarrow \min(A[1], B[1], C[1])
+\]
+\[
+\text{{high}} \leftarrow \max(A[\text{{length}}(A)], B[\text{{length}}(B)], C[\text{{length}}(C)])
+\]
+
+
 
 \section{Algorithm Description}
 % Describe your algorithm here
+Our algorithm is based on a modified binary search approach. It narrows down the range of possible values using the three sorted arrays \(A\), \(B\), and \(C\).
+\begin{enumerate}
+    \item Initialize the search range \(low\) and \(high\) using the minimum and maximum values from the first and last elements of arrays \(A\), \(B\), and \(C\).
+    \item Use a while loop to iteratively narrow down the search range until \(low\) is not less than \(high\).
+    \item Inside the loop, calculate the \(mid\) value as the average of \(low\) and \(high\).
+    \item Use the \texttt{CountLessEqual} function to count the number of elements less than or equal to \(mid\) in arrays \(A\), \(B\), and \(C\).
+    \item If the count is less than \(k\), adjust the search range to the right (\(low = mid + 1\)), as the \(k\)-th smallest element must be on the right side.
+    \item If the count is greater than or equal to \(k\), adjust the search range to the left (\(high = mid\)), as the \(k\)-th smallest element must be on the left side.
+    \item After the while loop, the \(low\) value represents the \(k\)-th smallest element in \(A \cup B \cup C\).
+    \item Return the \(low\) value as the result.
+\end{enumerate}
 
-\section{Recurrence Relation}
-% Provide the recursive relation of your algorithm
+
+
+% \section{Recurrence Relation}
+% % Provide the recursive relation of your algorithm
+ 
 
 \section{Complexity Analysis}
 % Analyze the time and space complexity of your algorithm
+The time complexity of our algorithm is \(O(\log n)\) due to the binary search on each array. The space complexity is \(O(1)\) as we use a constant amount of extra space.
+
 
 \section{Pseudocode}
 \begin{algorithm}
-\caption{Your Algorithm}
 \begin{algorithmic}[1]
-    \Function{YourAlgorithm}{$\text{input parameters}$}
-        % Pseudocode for your algorithm
+
+\caption{Count Less Equal}
+
+\Function{CountLessEqual}{$mid, arr$}
+    \State $count \gets 0$
+    \For{$num$ in $arr$}
+        \If{$num \leq mid$}
+            \State $count \gets count + 1$
+        \EndIf
+    \EndFor
+    \State \Return $count$
+\EndFunction
+
+\caption{Kth Smallest Element}
+    \Function{KthSmallestElement}{$A, B, C, k$}
+        \State $low \gets \min(A[1], B[1], C[1])$
+        \State $high \gets \max(A[\text{length}(A)], B[\text{length}(B)], C[\text{length}(C)])$
+        
+        \While{$low < high$}
+            \State $mid \gets \lfloor (low + high) / 2 \rfloor$
+            \State $count \gets 0$
+            
+            \For{$arr$ in $[A, B, C]$}
+                \State $count \gets count + \text{CountLessEqual}(mid, arr)$
+            \EndFor
+            
+            \If{$count < k$}
+                \State $low \gets mid + 1$
+            \Else
+                \State $high \gets mid$
+            \EndIf
+        \EndWhile
+        
+        \State \Return $low$
     \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
+
+
 \section{Proof of Correctness}
 % Provide the proof of correctness for your algorithm
+The correctness of our algorithm is based on the binary search paradigm, ensuring that the k-th smallest element is efficiently located by iteratively narrowing down the search space.
 
 \end{document}

@@ -5,8 +5,7 @@ using namespace std;
 class Solution{
 public:
     int matrixMultiplication(int n, int arr[]){
-        // 0th row and 0th
-        // column of m[][] are not used
+        // 0th row and 0th column of m[][] are not used
         int m[n][n];
      
         int i, j, k, L, q;
