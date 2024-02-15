@@ -1,3 +1,23 @@
+class Solution{
+public:
+    bool subsetSumtoK(int n,int k,vector<int> &arr){//space optimization
+        vector<bool> prev(k+1,0),curr(k+1,0);
+        prev[0]=curr[0]=true;
+        prev[arr[0]]=true;
+        for(int idx=1;idx<n;idx++){
+            for(int target=1;target<=k;target++){
+                bool nottake=prev[target];
+                bool take=false;
+                if(arr[idx]<=target){
+                    take=prev[target-arr[idx]];
+                    curr[target]=take||nottake;
+                }
+                prev=curr;
+            }
+            return prev[k];
+        }
+    }
+};
 //tab
 #include <bits/stdc++.h>
 using namespace std;
@@ -37,7 +57,7 @@ public:
 //         if(arr[idx]<=target){
 //             take=solve(idx-1,target-arr[idx],arr,dp);
 //         }
-//         return take | nottake;
+//         return take || nottake;
 //     }
 //     bool isSubsetSum(vector<int>arr, int sum){
 //         int n=arr.size();
