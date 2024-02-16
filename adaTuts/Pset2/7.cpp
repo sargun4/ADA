@@ -2,7 +2,6 @@
 // fourth sequence is a sequence of indices J[1, 2, . . . , `] satisfying the following properties.
 // • 1 ≤ J[i] ≤ n for all j.
 
-// 2
 
 // • A[J[i]] < A[J[i + 1]] for all i < `.
 // • If J[i] is even, then J[i + 1] > J[i].
@@ -10,10 +9,92 @@
 // For example, if the numbers in the input array A appear in this order 1, 1, 8, 7, 5, 6, 3, 6, 4, 4, 8, 3,
 // 9, 1, 2, 2, 3, 9, 4, 0, then a longest increasing back and fourth sequence is 0(20), 1(1), 2(15),
 // 3(18), 4(10), 6(6), 7(4), 8(3), 9(13).
+//memo-
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
 
-#include <bits/stdc++.h>
 using namespace std;
 
+unordered_map<string, int> memo;
+
+int memoizedLongestIncreasingBF(const vector<int>& A, int i, int prevIndex, bool isEven) {
+    if (i == A.size()) {
+        return 0;
+    }
+
+    string key = to_string(i) + "_" + to_string(prevIndex) + "_" + to_string(isEven);
+    if (memo.find(key) != memo.end()) {
+        return memo[key];
+    }
+
+    int lengthIfExcluded = memoizedLongestIncreasingBF(A, i + 1, prevIndex, isEven);
+
+    int lengthIfIncluded = 0;
+    if ((isEven && A[i] > A[prevIndex]) || (!isEven && A[i] < A[prevIndex])) {
+        lengthIfIncluded = 1 + memoizedLongestIncreasingBF(A, i + 1, i, !isEven);
+    }
+
+    memo[key] = max(lengthIfExcluded, lengthIfIncluded);
+    return memo[key];
+}
+
+vector<int> findLongestIncreasingBFMemo(const vector<int>& A) {
+    int maxLength = 0;
+    int endIndex = 0;
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i) {
+        int length = memoizedLongestIncreasingBF(A, i + 1, i, true) + 1; // Adding 1 for the current element
+        if (length > maxLength) {
+            maxLength = length;
+            endIndex = i;
+        }
+    }
+
+    vector<int> result;
+    int currentIndex = endIndex;
+    int currentLength = maxLength;
+
+    while (currentLength > 0) {
+        result.push_back(currentIndex);
+        currentLength--;
+
+        if (currentLength > 0) {
+            for (int j = currentIndex - 1; j >= 0; --j) {
+                if (A[j] < A[currentIndex]) {
+                    currentIndex = j;
+                    break;
+                }
+            }
+        }
+    }
+
+    reverse(result.begin(), result.end()); // Reverse to get the correct order
+    return result;
+}
+
+int main() {
+    // Example usage
+    vector<int> A = {1, 1, 8, 7, 5, 6, 3, 6, 4, 4, 8, 3, 9, 1, 2, 2, 3, 9, 4, 0};
+
+    // Call the function to find the longest increasing back-and-forth sequence
+    vector<int> result = findLongestIncreasingBFMemo(A);
+
+    // Output the result
+    cout << "Longest increasing back-and-forth sequence: ";
+    for (int i : result) {
+        cout << i << "(" << A[i] << ") ";
+    }
+
+    return 0;
+}
+
+
+
+
+// 
 // Function to find the longest increasing back-and-forth sequence
 vector<int> longestIncreasingBackAndForth(const vector<int>& A) {
     int n = A.size();
