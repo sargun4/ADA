@@ -70,7 +70,8 @@ int memoizedMinCost(const vector<int>& d, const vector<int>& m, int i, int curre
 // Tabulation Solution (TAB):
 int minCost(const vector<int>& d, const vector<int>& m, int M) {
     int n = d.size();
-    vector<vector<int>> dp(n, vector<int>(2, 0)); // dp[i][j] stores the minimum cost up to the i-th month with the last city being j
+    vector<vector<int>> dp(n, vector<int>(2, 0)); // dp[i][j] stores the minimum cost up to the i-th month with
+    //  the last city being j
 
     dp[0][0] = d[0];
     dp[0][1] = m[0];

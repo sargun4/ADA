@@ -22,7 +22,6 @@ public:
                 }
                 curr[j]=max(take,skip);
             }
-            prev=curr;
         }
         return prev[n];
     }
@@ -76,7 +75,3 @@ public:
 
 // // //Time Complexity: O(N^2)
 // // //Auxiliary Space: O(N) 
-
-// //Time Complexity: O(N^2)
-// //Auxiliary Space: O(N) 
-  

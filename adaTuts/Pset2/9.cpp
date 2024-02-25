@@ -1,10 +1,5 @@
 // 9. If there is a team S of n players, then design an algorithm that counts the number of tuples
-// (A, x) such that A ⊆ S, x ∈ A and |A| = k. Same as previous question, if your algorithm
-// uses n!
-// k!(n−k)!
-// to compute the number of teams having exactly k players, then you will be
-
-// awarded zero marks.
+// (A, x) such that A ⊆ S, x ∈ A and |A| = k. Same as previous question, dont use n! / (k!(n−k)!)
 #include <iostream>
 #include <vector>
 

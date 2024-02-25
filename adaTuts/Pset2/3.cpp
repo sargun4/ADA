@@ -4,8 +4,7 @@
 // hotels you stop at. You must stop at the final hotel (at distance an), which is your destination.
 // You’d ideally like to travel 250 miles a day, but this may not be possible (depending on
 // the spacing of the hotels). If you travel x miles during a day, the penalty for that day is
-// (250 − x)
-// 2
+// (250 − x)^2
 // . You want to plan your trip so as to minimize the total penalty – that is, the sum,
 // over all travel days, of the daily penalties. Give an efficient algorithm that determines the
 // minimum cost of a sequence of hotels at which to stop.
