@@ -1,5 +1,7 @@
 // https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/
 
+#include <bits/stdc++.h>
+using namespace std; 
 //tabualtion
 class Solution{
     public: 
