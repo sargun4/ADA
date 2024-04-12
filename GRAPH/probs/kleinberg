@@ -1,0 +1,118 @@
+<!-- Kleinberg HW 7.7
+Consider a set of mobile computing clients in a certain town who each need to be
+connected to one of several possible base stations. We’ll suppose there are n
+clients, with the position of each client specified by its (x,y) coordinates in the
+plane. There are also k base stations; the position of each of these is specified
+by (x,y) coordinates as well.
+For each client, we wish to connect it to exactly one of the base stations. Our
+choice of connections is constrained in the following ways.
+There is a range parameter r: a client can only be connected to a base station
+that is within distance r. There is also a load parameter L: no more than L clients
+can be connected to any single base station.
+Your goal is to design a polynomial-time algorithm for the following problem. Give
+the positions of a set of base stations, be connected simultaneously to a base
+station, subject to the range and load conditions in the previous paragraph -->
+
+Function ConnectClientsToBaseStations(Clients[], BaseStations[], r, L):
+    ConstructConnectivityGraph(Clients, BaseStations, r)
+    Matching = MaximumBipartiteMatching(ConnectivityGraph)
+    Connections = []
+
+    For each matched edge (client, base station) in Matching:
+        If base station's load < L:
+            Add connection between client and base station to Connections
+            Increment base station's load
+    
+    Return Connections
+
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+struct Point {
+    int x, y;
+};
+
+bool withinRange(Point p1, Point p2, int r) {
+    return (pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2)) <= pow(r, 2);
+}
+
+bool bpm(vector<vector<bool>>& G, int u, vector<bool>& vis, vector<int>& match) {
+    for (int v = 0; v < G[u].size(); ++v) {
+        if (G[u][v] && !vis[v]) {
+            vis[v] = true;
+            if (match[v] == -1 || bpm(G, match[v], vis, match)) {
+                match[v] = u;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int maximumMatch(vector<vector<bool>>& G) {
+    int m = G.size();
+    int n = G[0].size();
+    vector<int> match(n, -1);
+    int res = 0;
+
+    for (int u = 0; u < m; ++u) {
+        vector<bool> vis(n, false);
+        if (bpm(G, u, vis, match)) {
+            ++res;
+        }
+    }
+    return res;
+}
+
+vector<pair<Point, Point>> connectClientsToBaseStations(vector<Point>& clients, vector<Point>& baseStations, int r, int L) {
+    int n = clients.size();
+    int m = baseStations.size();
+
+    // Construct connectivity graph
+    vector<vector<bool>> connectivityGraph(n, vector<bool>(m, false));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (withinRange(clients[i], baseStations[j], r)) {
+                connectivityGraph[i][j] = true;
+            }
+        }
+    }
+
+    // Maximum bipartite matching
+    int maxMatching = maximumMatch(connectivityGraph);
+
+    // Connect clients to base stations
+    vector<pair<Point, Point>> connections;
+    vector<int> baseStationLoads(m, 0);
+    for (int j = 0; j < m; ++j) {
+        for (int i = 0; i < n; ++i) {
+            if (connectivityGraph[i][j] && baseStationLoads[j] < L) {
+                connections.push_back({clients[i], baseStations[j]});
+                ++baseStationLoads[j];
+            }
+        }
+    }
+
+    return connections;
+}
+
+int main() {
+    vector<Point> clients = {{0, 0}, {1, 1}, {2, 2}};
+    vector<Point> baseStations = {{0, 1}, {1, 0}, {2, 1}};
+    int r = 2;
+    int L = 2;
+
+    vector<pair<Point, Point>> connections = connectClientsToBaseStations(clients, baseStations, r, L);
+
+    // Output connections
+    for (auto connection : connections) {
+        cout << "Client (" << connection.first.x << ", " << connection.first.y << ") connected to base station (" << connection.second.x << ", " << connection.second.y << ")" << endl;
+    }
+
+    return 0;
+}
