@@ -64,16 +64,16 @@ struct Edge {
 };
 
 // Function to find the k smallest spanning trees of the graph
-vector<vector<Edge>> kSmallestSpanningTrees(const vector<vector<Edge>>& graph, int k) {
+vector<vector<Edge>> kSmallestSpanningTrees(vector<vector<Edge>>& graph, int k) {
     // Prim's algorithm to find the minimum spanning tree
-    auto primMST = [](const vector<vector<Edge>>& g) -> vector<Edge> {
+    auto primMST = [](vector<vector<Edge>>& g) -> vector<Edge> {
         vector<Edge> MST;
         int V = g.size();
         vector<bool> visited(V, false);
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
         visited[0] = true;
-        for (const Edge& edge : g[0]) {
+        for (Edge& edge : g[0]) {
             pq.push({edge.weight, edge.v});
         }
 
@@ -86,7 +86,7 @@ vector<vector<Edge>> kSmallestSpanningTrees(const vector<vector<Edge>>& graph, i
             visited[u] = true;
             MST.push_back({0, u, weight});
 
-            for (const Edge& edge : g[u]) {
+            for (Edge& edge : g[u]) {
                 if (!visited[edge.v]) {
                     pq.push({edge.weight, edge.v});
                 }
@@ -103,12 +103,12 @@ vector<vector<Edge>> kSmallestSpanningTrees(const vector<vector<Edge>>& graph, i
         vector<vector<Edge>> newGraph(graph);
 
         // Remove edges present in previous MSTs
-        for (const Edge& edge : kSpanningTrees.back()) {
+        for (Edge& edge : kSpanningTrees.back()) {
             newGraph[edge.u].erase(remove_if(newGraph[edge.u].begin(), newGraph[edge.u].end(),
-                                              [&](const Edge& e) { return e.v == edge.v; }),
+                                              [&](Edge& e) { return e.v == edge.v; }),
                                    newGraph[edge.u].end());
             newGraph[edge.v].erase(remove_if(newGraph[edge.v].begin(), newGraph[edge.v].end(),
-                                              [&](const Edge& e) { return e.v == edge.u; }),
+                                              [&](Edge& e) { return e.v == edge.u; }),
                                    newGraph[edge.v].end());
         }
 
@@ -120,15 +120,15 @@ vector<vector<Edge>> kSmallestSpanningTrees(const vector<vector<Edge>>& graph, i
 }
 
 // Function to find the shortest path from s to t when exactly one edge in G has negative weight
-int shortestPathWithOneNegativeEdge(const vector<vector<Edge>>& graph, int s, int t) {
+int shortestPathWithOneNegativeEdge(vector<vector<Edge>>& graph, int s, int t) {
     int V = graph.size();
-    vector<int> dist(V, numeric_limits<int>::max());
+    vector<int> dist(V, inf);
     dist[s] = 0;
 
     for (int i = 0; i < V - 1; ++i) {
         for (int u = 0; u < V; ++u) {
-            for (const Edge& edge : graph[u]) {
-                if (dist[u] != numeric_limits<int>::max() && dist[u] + edge.weight < dist[edge.v]) {
+            for (Edge& edge : graph[u]) {
+                if (dist[u] != inf && dist[u] + edge.weight < dist[edge.v]) {
                     dist[edge.v] = dist[u] + edge.weight;
                 }
             }
@@ -139,15 +139,15 @@ int shortestPathWithOneNegativeEdge(const vector<vector<Edge>>& graph, int s, in
 }
 
 // Function to find the shortest path from s to t when exactly k edges in G have negative weight
-int shortestPathWithKNegativeEdges(const vector<vector<Edge>>& graph, int s, int t, int k) {
+int shortestPathWithKNegativeEdges(vector<vector<Edge>>& graph, int s, int t, int k) {
     int V = graph.size();
-    vector<int> dist(V, numeric_limits<int>::max());
+    vector<int> dist(V, inf);
     dist[s] = 0;
 
     for (int i = 0; i < k; ++i) {
         for (int u = 0; u < V; ++u) {
-            for (const Edge& edge : graph[u]) {
-                if (dist[u] != numeric_limits<int>::max() && dist[u] + edge.weight < dist[edge.v]) {
+            for (Edge& edge : graph[u]) {
+                if (dist[u] != inf && dist[u] + edge.weight < dist[edge.v]) {
                     dist[edge.v] = dist[u] + edge.weight;
                 }
             }
@@ -156,10 +156,10 @@ int shortestPathWithKNegativeEdges(const vector<vector<Edge>>& graph, int s, int
 
     // Check for negative cycles
     for (int u = 0; u < V; ++u) {
-        for (const Edge& edge : graph[u]) {
-            if (dist[u] != numeric_limits<int>::max() && dist[u] + edge.weight < dist[edge.v]) {
+        for (Edge& edge : graph[u]) {
+            if (dist[u] != inf && dist[u] + edge.weight < dist[edge.v]) {
                 // Negative cycle found
-                return numeric_limits<int>::min();
+                return inf;
             }
         }
     }
@@ -181,7 +181,7 @@ int main() {
     cout << "K smallest spanning trees:\n";
     for (int i = 0; i < k; ++i) {
         cout << "Tree " << i + 1 << ":\n";
-        for (const Edge& edge : kTrees[i]) {
+        for (Edge& edge : kTrees[i]) {
             cout << edge.u << " - " << edge.v << " : " << edge.weight << endl;
         }
     }

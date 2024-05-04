@@ -33,21 +33,21 @@ struct Edge {
     int src, dest, weight;
 };
 
-void bellmanFord(const vector<Edge>& edges, int V, int src) {
-    vector<int> dist(V, numeric_limits<int>::max());
+void bellmanFord(vector<Edge>& edges, int V, int src) {
+    vector<int> dist(V, inf);
     dist[src] = 0;
 
     for (int i = 0; i < V - 1; ++i) {
-        for (const Edge& edge : edges) {
-            if (dist[edge.src] != numeric_limits<int>::max() && dist[edge.src] + edge.weight < dist[edge.dest]) {
+        for (Edge& edge : edges) {
+            if (dist[edge.src] != inf && dist[edge.src] + edge.weight < dist[edge.dest]) {
                 dist[edge.dest] = dist[edge.src] + edge.weight;
             }
         }
     }
 
     // Check for negative cycles
-    for (const Edge& edge : edges) {
-        if (dist[edge.src] != numeric_limits<int>::max() && dist[edge.src] + edge.weight < dist[edge.dest]) {
+    for (Edge& edge : edges) {
+        if (dist[edge.src] != inf && dist[edge.src] + edge.weight < dist[edge.dest]) {
             cout << "Graph contains a negative cycle reachable from source vertex " << src << endl;
             return;
         }
@@ -55,9 +55,9 @@ void bellmanFord(const vector<Edge>& edges, int V, int src) {
 
     // Output shortest-path distances
     for (int i = 0; i < V; ++i) {
-        if (dist[i] == numeric_limits<int>::max()) {
+        if (dist[i] == inf) {
             cout << "dist(" << src << ", " << i << ") = ∞" << endl;
-        } else if (dist[i] == numeric_limits<int>::min()) {
+        } else if (dist[i] == inf) {
             cout << "dist(" << src << ", " << i << ") = -∞" << endl;
         } else {
             cout << "dist(" << src << ", " << i << ") = " << dist[i] << endl;

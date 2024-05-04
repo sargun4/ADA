@@ -45,8 +45,7 @@ int primMST(vector<vector<pair<int, int>>>& graph, vector<bool>& vis, int start)
                 pq.push({edge.second, edge.first});
             }
         }
-    }
-
+    } 
     return totalWt;
 }
 

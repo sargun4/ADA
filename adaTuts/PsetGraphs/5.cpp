@@ -1,9 +1,9 @@
 // To find every (s, t)-cut vertex in a directed acyclic graph (DAG) 
-// G with a unique source 
+// G with a unique src 
 // s and a unique sink 
 // t, we can use a variation of depth-first search (DFS) algorithm.
 
-// The idea is to perform a DFS traversal starting from the source vertex 
+// The idea is to perform a DFS traversal starting from the src vertex 
 // s and mark vertices that are reachable from 
 // s. Then, perform another DFS traversal starting from the sink vertex 
 // t and mark vertices that can reach 
@@ -11,7 +11,7 @@
 
 // Here's the algorithm:
 
-// Perform a DFS traversal starting from the source vertex 
+// Perform a DFS traversal starting from the src vertex 
 // s, marking all reachable vertices.
 // Perform a DFS traversal starting from the sink vertex 
 // t, marking all vertices that can reach 
@@ -48,12 +48,12 @@ public:
     }
 
     // Find every (s, t)-cut vertex in the graph
-    vector<int> findSTCutVertices(int source, int sink) {
-        vector<bool> reachableFromSource(V, false); // Mark vertices reachable from the source
+    vector<int> findSTCutVertices(int src, int sink) {
+        vector<bool> reachableFromSource(V, false); // Mark vertices reachable from the src
         vector<bool> canReachSink(V, false); // Mark vertices that can reach the sink
 
-        // Step 1: Perform DFS traversal starting from the source vertex
-        dfs(source, reachableFromSource);
+        // Step 1: Perform DFS traversal starting from the src vertex
+        dfs(src, reachableFromSource);
 
         // Step 2: Perform DFS traversal starting from the sink vertex
         dfs(sink, canReachSink);
@@ -61,7 +61,7 @@ public:
         // Step 3: Find (s, t)-cut vertices
         vector<int> cutVertices;
         for (int v = 0; v < V; ++v) {
-            if (v != source && v != sink && !reachableFromSource[v] && canReachSink[v]) {
+            if (v != src && v != sink && !reachableFromSource[v] && canReachSink[v]) {
                 cutVertices.push_back(v);
             }
         }
@@ -83,10 +83,10 @@ int main() {
     G.addEdge(4, 6);
     G.addEdge(5, 6);
 
-    int source = 0; // Source vertex
+    int src = 0; // Source vertex
     int sink = 6;   // Sink vertex
 
-    vector<int> cutVertices = G.findSTCutVertices(source, sink);
+    vector<int> cutVertices = G.findSTCutVertices(src, sink);
 
     cout << "The (s, t)-cut vertices in the graph are: ";
     for (int vertex : cutVertices) {
@@ -97,7 +97,7 @@ int main() {
     return 0;
 }
 
-// performs two DFS traversals to mark vertices that are reachable from the source and vertices that can reach the sink. Finally, it
+// performs two DFS traversals to mark vertices that are reachable from the src and vertices that can reach the sink. Finally, it
 //  identifies the vertices that were not marked in both traversals as the (s, t)-cut vertices. The time complexity of the algorithm is 
  
 // O(V+E), where 
